@@ -45,26 +45,40 @@ x_train, x_valid, y_train, y_val = train_test_split(x, y, test_size=0.2, random_
 #Model
 model = Sequential()
 model.add(Lambda(lambda x: x/127.5 - 1.0, input_shape=INPUT_SHAPE))
-model.add(Conv2D(24, (5,5), activation='elu', strides=(2,2)))
+model.add(Conv2D(8, (3,3), activation='elu', padding='same'))
 model.add(BatchNormalization())
-model.add(Conv2D(36, (5,5), activation='elu', strides=(2,2)))
+model.add(Conv2D(8, (3,3), activation='elu', padding='same'))
 model.add(BatchNormalization())
-model.add(Conv2D(48, (5,5), activation='elu', strides=(2,2)))
+model.add(MaxPooling2D())
+
+model.add(Conv2D(16, (3,3), activation='elu', padding='same'))
 model.add(BatchNormalization())
-model.add(Conv2D(64, (3,3), activation='elu'))
+model.add(Conv2D(16, (3,3), activation='elu', padding='same'))
 model.add(BatchNormalization())
-model.add(Conv2D(64, (3,3), activation='elu'))
+model.add(MaxPooling2D())
+
+model.add(Conv2D(32, (3,3), activation='elu', padding='same'))
 model.add(BatchNormalization())
+model.add(Conv2D(32, (3,3), activation='elu', padding='same'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D())
+
+model.add(Conv2D(64, (3,3), activation='elu', padding='same'))
+model.add(BatchNormalization())
+model.add(Conv2D(64, (3,3), activation='elu', padding='same'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D())
+
 model.add(Dropout(0.5))
 model.add(Flatten())
-model.add(Dense(100, activation='elu', kernel_regularizer=tf.keras.regularizers.L2(0.01)))
-model.add(Dense(50, activation='elu', kernel_regularizer=tf.keras.regularizers.L2(0.01)))
-model.add(Dense(10,activation='elu', kernel_regularizer=tf.keras.regularizers.L2(0.01)))
+model.add(Dense(512, activation='elu', kernel_regularizer=tf.keras.regularizers.L2(0.01)))
+model.add(Dense(256, activation='elu', kernel_regularizer=tf.keras.regularizers.L2(0.01)))
+model.add(Dense(128,activation='elu', kernel_regularizer=tf.keras.regularizers.L2(0.01)))
 model.add(Dense(1, activation='tanh'))
 
 model.summary()
 
-nb_epoch = 10
+nb_epoch = 15
 samples_per_epoch = 1000
 batch_size = 32
 save_best_only = True
